@@ -409,3 +409,5 @@ if __name__ == "__main__":
   #driver
     app = SampleApp()  
     app.mainloop()
+# This project was made by Mohamed Galal ElGemeie 202000206
+# All rights reserved to the user https://github.com/Mohamed-ElGemeie
