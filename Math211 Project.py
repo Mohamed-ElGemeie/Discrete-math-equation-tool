@@ -360,6 +360,7 @@ class truth(tk.Frame):
     def draw(self): 
         self.turt_truth.clear()
         self.turt_equ.clear()
+        truth.error_visor(self,'')
         x=self.eqt_entry_box1.get()
         y=self.eqt_entry_box2.get()
         if x=='' and y=='':
