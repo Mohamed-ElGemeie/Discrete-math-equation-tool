@@ -1,18 +1,7 @@
 import turtle
 import tkinter as tk
-import numpy as np
-import operator
-import re
+from collections import OrderedDict
 from time import sleep
-# NO more nested brackets, soo be happy man. you seem to lose alot of fatih when facced with calamty, but i want you to know 
-
-# that you are the srtongest currently in your entier life,
-#and that as much as it seems impossible, you can do it.
-#Note: 1-create sectonier that sorts the equations by nesting in a list that could be passed to the turtles that would pass it
-#        calculator calss.
-# You got this, i know you scared, but you pulled alot before. i AM WITH  YOU and GOD IS too. Dont worry
-#      2-create turtle for each column, and use the bits class to return the turtle's next drawing depending on the equation given
-#      3-create bits class where we craete bitwise operations that take bits and returns output  
 
 #Accepted Opertaions: 
 # v (OR)
@@ -36,32 +25,144 @@ def change_draw(turt,cont,name,pos,heading):
             turt.write(0,font=("Helvetica", 16, "normal"), align="center")
         turt.forward(25)
     turt.color('black')
-   # self.turt_truth,i,pow(2*len(self.varis)),1      
 #--------------------------------------------------------------------------------------------------
 class calc():
     def bit_not(l1):
         l2=[]
         for i in l1:
-            l2.append(not i)
+            if i=='True':
+                l2.append('False')
+            else:
+                l2.append('True')
         return(l2)
+    def bit_and(l1,l2):
+        l3=[]
+        for (i,g) in zip(l1,l2):
+            if i=='True' and g=='True':
+                l3.append('True')
+            else:
+                l3.append('False')
+        return(l3)
+    def bit_or(l1,l2):
+        l3=[]
+        for(i,g)in zip(l1,l2):
+            if i=='False' and g=="False":
+                l3.append('False')
+            else:
+                l3.append('True')
+        return(l3)
+    def bit_imply(l1,l2):
+        l3=[]
+        for(i,g)in zip(l1,l2):
+            if i=='True' and g=="False":
+                l3.append('False')
+            else:
+                l3.append('True')
+        return(l3)
+    def bit_bicond(l1,l2,same):
+        l3=[]
+        if same:
+            for (i,g) in zip(l1,l2):
+                if i ==g:
+                    l3.append('True')
+                else:
+                    l3.append('False')
+        else:
+            for (i,g) in zip(l1,l2):
+                if i !=g:
+                    l3.append('True')
+                else:
+                    l3.append('False')
+        return(l3)
 #--------------------------------------------------------------------------------------------------
-# pvpvpv(pvp)
-# (pv(pvp))v((pvp)v(pvp))
 
 #groups by sections to calcuate correclty
 def sectioner(cont,table_dic,size):
- 
     in_l=cont[:]
-    print(in_l)
-    sections={'':[bool(),[]]}
-    for i in range(len(in_l)):
+    sections={}
+    order = OrderedDict()
+    i=0
+    while i<len(in_l):
         if in_l[i]=='~':
-            sections[f'~{in_l[i+1]}']=[0,[]]
-            for g in range(size):
-                sections[f'~{in_l[i+1]}'][1].append(calc.bit_not(table_dic[f'{in_l[g+1]}']))
-    
-    print(sections)
-    return(sections)
+            name=f'~{in_l[i+1]}'
+            sections[name]=[True,calc.bit_not(table_dic[in_l[i+1]])]
+            table_dic[name]=calc.bit_not(table_dic[in_l[i+1]])
+            order[name]=calc.bit_not(table_dic[in_l[i+1]])
+            in_l.pop(i+1)
+            in_l.pop(i)
+            in_l.insert(i,name)
+            i-=1
+        i+=1
+    #master loop on all operators
+    i=0 
+    while i< len(in_l):
+        #------------------ and
+        if in_l[i]=='^':
+            name=f'{in_l[i-1]}^{in_l[i+1]}'
+            sections[name]=[True,calc.bit_and(table_dic[in_l[i-1]],table_dic[in_l[i+1]])]
+            table_dic[name]=calc.bit_and(table_dic[in_l[i-1]],table_dic[in_l[i+1]])
+            order[name]=calc.bit_and(table_dic[in_l[i-1]],table_dic[in_l[i+1]])
+            in_l.pop(i+1)
+            in_l.pop(i)
+            in_l.pop(i-1)
+            in_l.insert(i-1,name)
+            i-=1
+        #------------------ or
+        if in_l[i]=='v':
+            name=f'{in_l[i-1]}v{in_l[i+1]}'
+            sections[name]=[True,calc.bit_or(table_dic[in_l[i-1]],table_dic[in_l[i+1]])]
+            table_dic[name]=calc.bit_or(table_dic[in_l[i-1]],table_dic[in_l[i+1]])
+            order[name]=calc.bit_or(table_dic[in_l[i-1]],table_dic[in_l[i+1]])
+            in_l.pop(i+1)
+            in_l.pop(i)
+            in_l.pop(i-1)
+            in_l.insert(i-1,name)
+            i-=1
+        i+=1
+    #implies
+    i=0
+    while i<len(in_l):
+        if in_l[i]=='>':
+            name=f'{in_l[i-1]}>{in_l[i+1]}'
+            sections[name]=[True,calc.bit_imply(table_dic[in_l[i-1]],table_dic[in_l[i+1]])]
+            table_dic[name]=calc.bit_imply(table_dic[in_l[i-1]],table_dic[in_l[i+1]])
+            order[name]=calc.bit_imply(table_dic[in_l[i-1]],table_dic[in_l[i+1]])
+            in_l.pop(i+1)
+            in_l.pop(i)
+            in_l.pop(i-1)
+            in_l.insert(i-1,name)
+            i-=1
+        i+=1      
+    #bi condictional
+    i=0    
+    while i<len(in_l):
+        if in_l[i]=='$':
+            name=f'{in_l[i-1]}${in_l[i+1]}'
+            sections[name]=[True,calc.bit_bicond(table_dic[in_l[i-1]],table_dic[in_l[i+1]],1)]
+            table_dic[name]=calc.bit_bicond(table_dic[in_l[i-1]],table_dic[in_l[i+1]],0)
+            order[name]=calc.bit_bicond(table_dic[in_l[i-1]],table_dic[in_l[i+1]],0)
+            in_l.pop(i+1)
+            in_l.pop(i)
+            in_l.pop(i-1)
+            in_l.insert(i-1,name)
+            i-=1
+        i+=1          
+    #xor
+    i=0
+    while i<len(in_l):
+        if in_l[i]=='o':
+            name=f'{in_l[i-1]}o{in_l[i+1]}'
+            sections[name]=[True,calc.bit_bicond(table_dic[in_l[i-1]],table_dic[in_l[i+1]],0)]
+            table_dic[name]=calc.bit_bicond(table_dic[in_l[i-1]],table_dic[in_l[i+1]],0)
+            order[name]=calc.bit_bicond(table_dic[in_l[i-1]],table_dic[in_l[i+1]],0)
+            in_l.pop(i+1)
+            in_l.pop(i)
+            in_l.pop(i-1)
+            in_l.insert(i-1,name)
+            i-=1
+        i+=1          
+    return(sections,order)
+
 #--------------------------------------------------------------------------------------------------
 
 def grombat(equ_raw):
@@ -119,7 +220,7 @@ class SampleApp(tk.Tk):
         stacker.grid_rowconfigure(0,weight=1)
         stacker.grid_columnconfigure(0,weight=1)
         self.frames={}
-        for i in (startpage,truth,inference):
+        for i in (startpage,truth):
             page_name=i.__name__
             frame= i(stacker,self,bg='#050045')
             self.frames[page_name]= frame
@@ -138,10 +239,7 @@ class startpage(tk.Frame):
         self.stacker = stacker 
         go_truth=tk.Button(self,height = 2,text=('Truth Table Drawer + Equivlence Check'),font=('Helvetica',20,'bold'),
                            command=lambda: stacker.show_frame('truth'),bg="#050045",fg="white",activeforeground="#050069")
-        go_infrence=tk.Button(self,height = 2 ,text=('Infrence Ruels Vizuilizer'),font=('Helvetica',20,'bold'),
-                              command=lambda: stacker.show_frame('inference'),bg="#050045",fg="white",activeforeground="#050069")
-        go_truth.place(x=150,y=170)
-        go_infrence.place(x=150,y=50)
+        go_truth.place(x=150,y=170)  
    
 class truth(tk.Frame):
     def __init__(self, parent, stacker,bg=None,fg=None):
@@ -155,34 +253,34 @@ class truth(tk.Frame):
         self.screen = turtle.TurtleScreen(self.canvas)    
         self.screen.colormode('#ebebeb')
         self.turt_truth = turtle.RawTurtle(self.canvas)
-        #the equations vars
+        self.turt_equ=    turtle.RawTurtle(self.canvas)
          
         #draw line
-        draw_btn=tk.Button(self,text="draw",command= lambda:truth.draw(self))
-        draw_btn.pack(side='top',pady=20)   
+        draw_btn=tk.Button(self,font=15,text="Draw",command= lambda:truth.draw(self))
+        draw_btn.pack(side='top',pady=5)   
         #error visor
-        self.error_visor=tk.Label(self ,width=60,height=4,text=(""),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
-        self.error_visor.pack(side='top',pady=20)    
+        self.error_visor=tk.Label(self ,width=80,height=5,text=(""),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
+        self.error_visor.pack(side='top',pady=5)    
+        self.error_visor.config(text="Insert in only one box for drawing the Truth table\nInsert in both for equivalence checking")
         #go back button
         go_back=tk.Button(self,height = 1 ,text=('Back'),font=('Helvetica',16,'bold'),
                               command=lambda: stacker.show_frame('startpage'),bg="#050045",fg="white",activeforeground="#050069")
         go_back.place(x=1700,y=650,anchor='w')
         #equation entry button
-        self.eqt_entry_box=tk.Entry(self,font=("Times",20),width=50)
-        self.eqt_entry_box.pack(side='top',pady=20)
-        #place(x=250,y=160)
+        self.eqt_entry_box1=tk.Entry(self,font=("Times",20),width=50)
+        self.eqt_entry_box1.pack(side='top',pady=5)
+        self.eqt_entry_box2=tk.Entry(self,font=("Times",20),width=50)
+        self.eqt_entry_box2.pack(side='top',pady=5)
+    
         #info label
-        info_entry=tk.Label(self ,text=("Accepted Opertaions:\nv (OR)\n^ (AND)\n~ (NOT)\no (XOR)\n> (Implies)\n$ (Biconditional)"),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
-        info_entry.place(x=15,y=15)
+        info_entry=tk.Label(self ,text=("Accepted Opertaions:\nv (OR)\n^ (AND)\n~ (NOT)\no (XOR)\n> (Implies)\n$ (Biconditional)\n\nNo Brackets ()"),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
+        info_entry.place(x=15,y=0)
     
         info_entry=tk.Label(self ,text=("Accepted letter variables:\np , q , r , s"),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
-        info_entry.place(x=200,y=15)
-        
-    
-        #enter button
-      #  enter_btn=tk.Button(self,text="Press",command= lambda: truth.enter(self))
-      #  enter_btn.pack()
-    
+        info_entry.place(x=200,y=0)
+        #bind the entry box with enter key press
+        self.eqt_entry_box1.bind('<Return>',lambda x:truth.draw(self))
+        self.eqt_entry_box2.bind('<Return>',lambda x:truth.draw(self))
         
     def error_visor(self,display):
         self.error_visor.config(text=display)
@@ -205,58 +303,108 @@ class truth(tk.Frame):
             count=start*2
             start=count
         return(table_library)
-    def draw(self): 
-        x=self.eqt_entry_box.get()
-        if self.eqt_entry_box.get()=='':
-            truth.error_visor(self,"The entry box is empty")
-            return()
-        package,stat= grombat(self.eqt_entry_box.get())
+    def equivalence(self):
+        x1=self.eqt_entry_box1.get()
+        x2=self.eqt_entry_box2.get()
+        package1,stat1= grombat(x1)
+        package2,stat2= grombat(x2)
         # used to call the wrong input handler with the specific message
-        truth.error_visor(self,stat)
-        if stat:
+        if stat1 or stat2:
+            truth.error_visor(self,f"EQU1:{stat1}\nEQU2:{stat2}")
             return()
         # -----
-        self.eqt_entry_box.delete(0,tk.END)
-        self.varis=[]
-        if 'p' in x:
-            self.varis.append('p')
-        if 'q' in x:
-            self.varis.append('q')
-        if 'r' in x:
-            self.varis.append('r')
-        if 's' in x:
-            self.varis.append('s')
+        self.eqt_entry_box1.delete(0,tk.END)
+        self.eqt_entry_box2.delete(0,tk.END)
+        self.varis1=[]
+        self.varis2=[]
+        for i in ['p','q','r','s']:
+            if i in x1:
+                self.varis1.append(i)
+            if i in x2:
+                self.varis2.append(i)
         self.turt_truth.penup()
-        #self.turt_truth.hideturtle()
-        self.turt_truth.setpos(0,0)    
-        table_dic=truth.create_table(self.varis)
-        start_pos=[-530,200]
-        for i,g in table_dic.items():
-            change_draw(turt=self.turt_truth,name=i,cont=g,pos=start_pos,heading=-90)
-            start_pos[0]=start_pos[0]+65
-        
-        sections=sectioner(cont=package,table_dic=table_dic,size=pow(2,len(self.varis)))
-         
-        self.turt_truth.setpos(0,0)
-        self.turt_truth.write(package, True,font=("Helvetica", 20, "normal"), align="center")
-        
-class inference(tk.Frame):
-    def __init__(self, parent, stacker,bg=None,fg=None):
-        tk.Frame.__init__(self, parent,bg=bg,fg=fg)
-        self.stacker = stacker 
-    
-        go_back=tk.Button(self,height = 1 ,text=('Back'),font=('Helvetica',16,'bold'),
-                          command=lambda: stacker.show_frame('startpage'),bg="#050045",fg="white",activeforeground="#050069")
-        go_back.place(x=900,y=600)
+        self.turt_equ.penup()
 
-    
-#main = turtle.Turtle()
-##main.write("P", True,font=("Helvetica", 24, "normal"), align="center")
-#main.penup()
-#main.setpos((-100,50))
-##main.pendown()
-##main.forward(100)
-#turtle.done()
+        self.turt_truth.setpos(0,0)
+        self.turt_equ.setpos(0,0)    
+        table_dic1=truth.create_table(self.varis1)
+        table_dic2=truth.create_table(self.varis2)
+        start_pos1=[-530,190]
+        start_pos2=[530,190]
+        for i,g in table_dic1.items():
+            change_draw(turt=self.turt_truth,name=i,cont=g,pos=start_pos1,heading=-90)
+            start_pos1[0]=start_pos1[0]+65
+        for i,g in table_dic2.items():
+            change_draw(turt=self.turt_equ,name=i,cont=g,pos=start_pos2,heading=-90)
+            start_pos2[0]=start_pos2[0]-65
+        sections1,last1=sectioner(cont=package1,table_dic=table_dic1,size=pow(2,len(self.varis1)))
+        sections2,last2=sectioner(cont=package2,table_dic=table_dic2,size=pow(2,len(self.varis2)))
+        last_l1= list(last1.items())
+        last_l2= list(last2.items())
+
+        for i,g in sections1.items():
+            if g[0]:
+                change_draw(turt=self.turt_truth,name=i,cont=g[1],pos=start_pos1,heading=-90)
+                start_pos1[0]=start_pos1[0]+30+(len(i)*19)
+        for i,g in sections2.items():
+            if g[0]:
+                change_draw(turt=self.turt_equ,name=i,cont=g[1],pos=start_pos2,heading=-90)
+                start_pos2[0]=start_pos2[0]-(30+(len(i)*19))        
+        self.turt_truth.setpos(0,0)
+        self.turt_equ.setpos(0,0)
+        for i,g in zip(last_l1[-1][1],last_l2[-1][1]):
+            if i !=g:
+                truth.error_visor(self,"These two Equations are Unequivalent")
+                return()
+        truth.error_visor(self,"These two Equations are Equivalent")
+        
+    def draw(self): 
+        self.turt_truth.clear()
+        self.turt_equ.clear()
+        x=self.eqt_entry_box1.get()
+        y=self.eqt_entry_box2.get()
+        if x=='' and y=='':
+            truth.error_visor(self,"Please fill any of the entry boxes")
+            return()
+        elif x!='' and y!='':
+            truth.equivalence(self)
+        else:
+            if x=='':
+                this_entry=y
+            else:
+                this_entry=x
+            package,stat= grombat(this_entry)
+            # used to call the wrong input handler with the specific message
+            if stat:
+                truth.error_visor(self,stat)
+                return()
+            # -----
+            self.eqt_entry_box1.delete(0,tk.END)
+            self.varis=[]
+            if 'p' in this_entry:
+                self.varis.append('p')
+            if 'q' in this_entry:
+                self.varis.append('q')
+            if 'r' in this_entry:
+                self.varis.append('r')
+            if 's' in this_entry:
+                self.varis.append('s')
+            self.turt_truth.penup()
+            self.turt_truth.setpos(0,0)    
+            table_dic=truth.create_table(self.varis)
+            start_pos=[-530,190]
+            for i,g in table_dic.items():
+                change_draw(turt=self.turt_truth,name=i,cont=g,pos=start_pos,heading=-90)
+                start_pos[0]=start_pos[0]+65
+            
+            sections,last=sectioner(cont=package,table_dic=table_dic,size=pow(2,len(self.varis)))
+
+            for i,g in sections.items():
+                if g[0]:
+                    change_draw(turt=self.turt_truth,name=i,cont=g[1],pos=start_pos,heading=-90)
+                    start_pos[0]=start_pos[0]+20+(len(i)*18)
+            self.turt_truth.setpos(0,0)
+ 
 if __name__ == "__main__":
   #driver
     app = SampleApp()  
