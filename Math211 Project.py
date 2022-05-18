@@ -1,7 +1,6 @@
 import turtle
 import tkinter as tk
 from collections import OrderedDict
-from time import sleep
 
 #Accepted Opertaions: 
 # v (OR)
