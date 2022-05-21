@@ -15,7 +15,7 @@
 
 ![Product Name Screen Shot](https://github.com/Mohamed-ElGemeie/Discrete-math-equation-tool/blob/main/examples/main_btn.PNG?raw=True)
 
-This project was made as a submission for my university's "Discrete Math" course. Its aim is to teach discrete math basics to people unfamiliar with it, and create a nice animation while doing it, also designed to be simple and easy on the eye for new students and teachers testing new equations.<br><br> It takes from the user a logical equation using the specigied charahcters to draw that equation's truth table, and if the user passes two equations: it draws thier truth tables and check for their equivlence. 
+This project was made as a submission for my university's "Discrete Math" course. Its aim is to teach discrete math basics to people unfamiliar with it, and create a nice animation while doing it, also designed to be simple and easy on the eye for new students and teachers testing new equations.<br><br> It takes from the user a logical equation using the specified characters to draw that equations truth table, and if the user passes two equations: it draws thier truth tables and check for their equivalence.
 
 
 
