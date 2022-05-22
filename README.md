@@ -28,7 +28,7 @@ This project was made as a submission for my university's "Discrete Math" course
 
 <!-- GETTING STARTED -->
 ## Getting Started
-To get started, download [Truth_table_drawer.py](https://github.com/Mohamed-ElGemeie/Discrete-math-equation-tool/blob/main/Truth_table_drawer.pyy)
+To get started, download [Truth_table_drawer.py](https://github.com/Mohamed-ElGemeie/Discrete-math-equation-tool/blob/main/Truth_table_drawer.py)
 
 ### Prerequisites
 
