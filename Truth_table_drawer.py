@@ -310,7 +310,7 @@ class truth(tk.Frame):
         self.eqt_entry_box2.pack(side='top',pady=5)
     
         #info label
-        info_entry=tk.Label(self ,text=("Accepted Opertaions:\nv (OR)\n^ (AND)\n~ (NOT)\no (XOR)\n> (Implies)\n$ (Biconditional)\n\n() (Brackets)"),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
+        info_entry=tk.Label(self ,text=("Accepted Opertaions:\nv (OR)\n^ (AND)\n~ (NOT)\no (XOR)\n> (Implies)\n$ (Biconditional)\n() (Brackets)"),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
         info_entry.place(x=15,y=0)
     
         info_entry=tk.Label(self ,text=("Accepted letter variables:\np , q , r , s"),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
