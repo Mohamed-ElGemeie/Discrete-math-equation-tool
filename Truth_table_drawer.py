@@ -2,7 +2,9 @@ from operator import eq
 import turtle
 import tkinter as tk
 from collections import OrderedDict
-
+"""This code is my project submission for the Discrete math course.
+Made by Mohamed ElGemeie (202000206) http://www.linkedin.com/in/mohamed-elgemeie
+All rigths reserved"""
 #Accepted Opertaions: 
 # v (OR)
 # ^ (AND)
@@ -451,3 +453,6 @@ if __name__ == "__main__":
   #driver
     app = SampleApp()  
     app.mainloop()
+"""This code is my project submission for the Discrete math course.
+Made by Mohamed ElGemeie (202000206) http://www.linkedin.com/in/mohamed-elgemeie
+All rigths reserved"""
