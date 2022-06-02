@@ -21,10 +21,10 @@ def change_draw(turt,cont,name,pos,heading):
     for i in cont:
         if i=='True':
             turt.color('green')
-            turt.write(1,font=("Helvetica", 14, "normal"), align="center")
+            turt.write('| 1 |',font=("Helvetica", 14, "normal"), align="center")
         else:
             turt.color('red')
-            turt.write(0,font=("Helvetica", 14, "normal"), align="center")
+            turt.write('| 0 |',font=("Helvetica", 14, "normal"), align="center")
         turt.forward(25)
     turt.color('black')
 #-------------------------------------------------------------------------
@@ -191,7 +191,7 @@ def sectioner(cont,table_dic,brac_count):
             in_l.pop(i-1)
             in_l.insert(i-1,name)
             i-=1
-        i+=1          
+        i+=1      
     return(sections,order)           
 
 #--------------------------------------------------------------------------------------------------
@@ -236,7 +236,7 @@ def grombat(equ_raw):
             else:
                 bitmap.append(0)
         for i in range(len(bitmap)-1):
-            if bitmap[i]+bitmap[i+1]>1:
+            if (bitmap[i]+bitmap[i+1])!=1:
                 return(False,"You can't have two consecutive variables or operators\nEX: PQ or ^>")
     #check if every Not symbol ~ is placed correctly, test 6
     for i in range(len(equ_l)):
@@ -312,7 +312,7 @@ class truth(tk.Frame):
         self.eqt_entry_box2.pack(side='top',pady=5)
     
         #info label
-        info_entry=tk.Label(self ,text=("Accepted Opertaions:\nv (OR)\n^ (AND)\n~ (NOT)\no (XOR)\n> (Implies)\n$ (Biconditional)\n() (Brackets)"),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
+        info_entry=tk.Label(self ,text=("Accepted Opertaions:\nv (OR)\n^ (AND)\n~ (NOT)\no (XOR)\n> (Implies)\n$ (Biconditional)\n\n() (Brackets)"),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
         info_entry.place(x=15,y=0)
     
         info_entry=tk.Label(self ,text=("Accepted letter variables:\np , q , r , s"),font=('Helvetica',12,'bold'),bg="#02002b",fg="white")
