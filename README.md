@@ -45,6 +45,7 @@ pip install PythonTurtle
 # Usage
 
 ## limits
+You can only input an equation of legnth<b> 13 charachters</b>, but you can change the resolution in the sample app class to fit your equation.<br> You will encounter and error when using two equation that are more than 13 character long.
 You can only input the following characters:<br>
 <br>Accepted Operations: 
 <br>
