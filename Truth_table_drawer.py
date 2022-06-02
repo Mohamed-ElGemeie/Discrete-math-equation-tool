@@ -21,10 +21,10 @@ def change_draw(turt,cont,name,pos,heading):
     for i in cont:
         if i=='True':
             turt.color('green')
-            turt.write('| 1 |',font=("Helvetica", 14, "normal"), align="center")
+            turt.write(1,font=("Helvetica", 14, "normal"), align="center")
         else:
             turt.color('red')
-            turt.write('| 0 |',font=("Helvetica", 14, "normal"), align="center")
+            turt.write(0,font=("Helvetica", 14, "normal"), align="center")
         turt.forward(25)
     turt.color('black')
 #-------------------------------------------------------------------------
