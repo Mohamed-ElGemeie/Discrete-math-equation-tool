@@ -251,7 +251,7 @@ class SampleApp(tk.Tk):
     global truth_ref
     def __init__(self,*args,**kwargs):
         tk.Tk.__init__(self,*args,**kwargs)
-        self.geometry(f'{1200}x{900}+10+10')
+        self.geometry(f'{1200}x{750}+10+10')
          #stacker of pages
         stacker=tk.Frame(self)
         stacker.pack(side="top",fill='both',expand=True)
@@ -304,7 +304,7 @@ class truth(tk.Frame):
         #go back button
         go_back=tk.Button(self,height = 1 ,text=('Back'),font=('Helvetica',16,'bold'),
                               command=lambda: stacker.show_frame('startpage'),bg="#050045",fg="white",activeforeground="#050069")
-        go_back.place(x=1700,y=650,anchor='w')
+        go_back.pack(side='bottom')
         #equation entry button
         self.eqt_entry_box1=tk.Entry(self,font=("Times",20),width=50)
         self.eqt_entry_box1.pack(side='top',pady=5)
